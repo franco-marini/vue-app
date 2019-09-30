@@ -5,8 +5,11 @@
           <img src="http://bit.ly/vue-img"
             alt="Vue SPA" />
         </router-link>
-        <router-link class="nav-item is-tab" to="/cateogry/front-end" exact>
-          Home
+        <router-link class="nav-item is-tab" to="/category/front-end" exact>
+          Front-end
+        </router-link>
+        <router-link class="nav-item is-tab" to="/category/mobile" exact>
+          Mobile
         </router-link>
         <router-link class="nav-item is-tab" to="/login">
           Login
