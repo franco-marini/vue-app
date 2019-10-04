@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const fs = require('fs')
 const path = require('path')
+const port = process.env.PORT || 3000
 
 const indexHTML = (() => {
   return fs.readFileSync(path.resolve(__dirname, './index.html'), 'utf-8')
@@ -16,11 +17,6 @@ app.get('*', (req, res) => {
   res.end()
 })
 
-app.get('./categories', (req, res) => {
-  res.send({})
-})
-
-const port = process.env.PORT || 3000
 app.listen(port, () => {
   console.log(`Server started at http://localhost:${port}`)
 })
