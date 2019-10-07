@@ -1,9 +1,7 @@
 <template>
   <div class="content">
     <div v-if="this.isAuthenticated">
-      Hello {{profile.name}} {{profile.lastname}}!
-      <p>Username: {{profile.username}}</p>
-      <p>Adress: {{profile.adress}}</p>
+      Hello User!
       <button v-on:click="logout()" class="button is-primary">
         Logout
       </button>
@@ -53,59 +51,28 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import appService from '../app.service.js'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     data () {
       return {
         email: '',
-        password: '',
-        profile: {}
+        password: ''
       }
     },
     computed: {
       ...mapGetters(['isAuthenticated'])
     },
-    watch: {
-      // isAuthenticated: function (val) {
-      //   if (val) {
-      //     const id = window.localStorage.getItem('id')
-      //     appService.getProfile(id)
-      //       .then(data => {
-      //         this.profile = data.profile
-      //       })
-      //   } else {
-      //     this.profile = {}
-      //   }
-      // }
-    },
     methods: {
+      ...mapActions({
+        logout: 'logout'
+      }),
       login () {
-        appService.login({ email: this.email, password: this.password })
-          .then((data) => {
-            window.localStorage.setItem('token', data.token)
-            window.localStorage.setItem('expiration', data.expiration)
-            window.localStorage.setItem('id', data.id)
-            // this.isAuthenticated = true
-            this.email = ''
+        this.$store.dispatch('login', { email: this.email, password: this.password })
+          .then(() => {
             this.password = ''
+            this.email = ''
           })
-          .catch(() => {
-          })
-      },
-      logout () {
-        window.localStorage.setItem('token', null)
-        window.localStorage.setItem('expiration', null)
-        window.localStorage.setItem('id', null)
-        // this.isAuthenticated = false
-      }
-    },
-    created () {
-      let expiration = window.localStorage.getItem('expiration')
-      let unixTimestamp = new Date().getTime() / 1000
-      if (expiration !== null && parseInt(expiration) - unixTimestamp > 0) {
-        // this.isAuthenticated = true
       }
     }
   }
