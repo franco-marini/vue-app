@@ -14,7 +14,6 @@ const appService = {
   },
   login (credentials) {
     return new Promise((resolve, reject) => {
-      console.log(credentials)
       axios.post('/users/login', credentials)
         .then(response => {
           resolve(response.data)
