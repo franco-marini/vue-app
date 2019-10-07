@@ -12,8 +12,17 @@
           Mobile
         </router-link>
         <router-link class="nav-item is-tab" to="/login">
-          Login
+          <span v-if="isAuthenticated">Logout</span><span v-else>Login</span>
         </router-link>
       </div>
     </nav>
 </template>
+
+<script>
+  import { mapGetters } from 'vuex'
+  export default {
+    computed: {
+      ...mapGetters(['isAuthenticated'])
+    }
+  }
+</script>
