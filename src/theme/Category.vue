@@ -11,7 +11,19 @@
 <script>
   import { mapGetters } from 'vuex'
   import Post from './Post.vue'
+
+  const fetchInitialData = (store, route) => {
+    let categoryId = '5d978bf9d36b042814bf9bd9'
+    if (route.params.id === 'mobile') {
+      categoryId = '5d978c01d36b042814bf9bda'
+    }
+    return store.dispatch('updateCategory', categoryId)
+  }
+
   export default {
+    asyncData (store, route) {
+      return fetchInitialData(store, route)
+    },
     components: {
       'app-post': Post
     },
@@ -22,11 +34,7 @@
     },
     methods: {
       loadPosts () {
-        let categoryId = '5d978bf9d36b042814bf9bd9'
-        if (this.$route.params.id === 'mobile') {
-          categoryId = '5d978c01d36b042814bf9bda'
-        }
-        this.$store.dispatch('updateCategory', categoryId)
+        fetchInitialData(this.$store, this.$route)
       }
     },
     watch: {
