@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import postModule from './post'
 import appService from '../app.service.js'
 
 Vue.use(Vuex)
@@ -10,6 +11,9 @@ const state = {
 }
 
 const store = new Vuex.Store({
+  modules: {
+    postModule
+  },
   state,
   getters: {
     isAuthenticated: (state) => {
