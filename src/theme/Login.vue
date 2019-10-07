@@ -53,6 +53,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import appService from '../app.service.js'
 
   export default {
@@ -60,22 +61,24 @@
       return {
         email: '',
         password: '',
-        isAuthenticated: false,
         profile: {}
       }
     },
+    computed: {
+      ...mapGetters(['isAuthenticated'])
+    },
     watch: {
-      isAuthenticated: function (val) {
-        if (val) {
-          const id = window.localStorage.getItem('id')
-          appService.getProfile(id)
-            .then(data => {
-              this.profile = data.profile
-            })
-        } else {
-          this.profile = {}
-        }
-      }
+      // isAuthenticated: function (val) {
+      //   if (val) {
+      //     const id = window.localStorage.getItem('id')
+      //     appService.getProfile(id)
+      //       .then(data => {
+      //         this.profile = data.profile
+      //       })
+      //   } else {
+      //     this.profile = {}
+      //   }
+      // }
     },
     methods: {
       login () {
@@ -84,7 +87,7 @@
             window.localStorage.setItem('token', data.token)
             window.localStorage.setItem('expiration', data.expiration)
             window.localStorage.setItem('id', data.id)
-            this.isAuthenticated = true
+            // this.isAuthenticated = true
             this.email = ''
             this.password = ''
           })
@@ -95,14 +98,14 @@
         window.localStorage.setItem('token', null)
         window.localStorage.setItem('expiration', null)
         window.localStorage.setItem('id', null)
-        this.isAuthenticated = false
+        // this.isAuthenticated = false
       }
     },
     created () {
       let expiration = window.localStorage.getItem('expiration')
       let unixTimestamp = new Date().getTime() / 1000
       if (expiration !== null && parseInt(expiration) - unixTimestamp > 0) {
-        this.isAuthenticated = true
+        // this.isAuthenticated = true
       }
     }
   }
