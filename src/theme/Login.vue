@@ -1,7 +1,9 @@
 <template>
   <div class="content">
     <div v-if="this.isAuthenticated">
-      Hello user!
+      Hello {{profile.name}} {{profile.lastname}}!
+      <p>Username: {{profile.username}}</p>
+      <p>Adress: {{profile.adress}}</p>
       <button v-on:click="logout()" class="button is-primary">
         Logout
       </button>
@@ -58,7 +60,21 @@
       return {
         email: '',
         password: '',
-        isAuthenticated: false
+        isAuthenticated: false,
+        profile: {}
+      }
+    },
+    watch: {
+      isAuthenticated: function (val) {
+        if (val) {
+          const id = window.localStorage.getItem('id')
+          appService.getProfile(id)
+            .then(data => {
+              this.profile = data.profile
+            })
+        } else {
+          this.profile = {}
+        }
       }
     },
     methods: {
@@ -67,6 +83,7 @@
           .then((data) => {
             window.localStorage.setItem('token', data.token)
             window.localStorage.setItem('expiration', data.expiration)
+            window.localStorage.setItem('id', data.id)
             this.isAuthenticated = true
             this.email = ''
             this.password = ''
@@ -77,6 +94,7 @@
       logout () {
         window.localStorage.setItem('token', null)
         window.localStorage.setItem('expiration', null)
+        window.localStorage.setItem('id', null)
         this.isAuthenticated = false
       }
     },
@@ -86,13 +104,6 @@
       if (expiration !== null && parseInt(expiration) - unixTimestamp > 0) {
         this.isAuthenticated = true
       }
-    },
-    updated () {
-      // let expiration = window.localStorage.getItem('expiration')
-      // let unixTimestamp = new Date().getTime() / 1000
-      // if (expiration !== null && parseInt(expiration) - unixTimestamp > 0) {
-      //   this.isAuthenticated = true
-      // }
     }
   }
 </script>
